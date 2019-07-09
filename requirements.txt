@@ -3,5 +3,4 @@ numpy
 matplotlib
 Pillow
 scipy
-itertools
 scikit-image
