@@ -1,8 +1,7 @@
 # List required packages in this file, one per line.
-tkinter
 numpy
 matplotlib
-PIL
+Pillow
 scipy
 itertools
-skimage
+scikit-image
