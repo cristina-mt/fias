@@ -1,0 +1,6 @@
+The documentation consists of:
+- A quick user guide ('Quick guide.pdf') explaining briefly step by step how to track filaments 
+  in an image and how to compute their mass per length.
+- A test image, as used in the quick guide, for the user to follow the steps. 
+
+A more detailed documentation is coming soon!
