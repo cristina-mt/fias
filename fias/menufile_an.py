@@ -31,7 +31,7 @@ class FileLoad():
 		
 	def numpy_load(self, filename):
 		
-		data = np.load(filename)
+		data = np.load(filename, allow_pickle = True)
 		
 		FileLoad.load_choice(self, data.files)
 		self.wait_window(self.lc_Window)
