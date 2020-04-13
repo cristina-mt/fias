@@ -21,9 +21,9 @@ class ROIdraw():
 		self._cpressed = 0
 
 		if self._menucheckRI.get() == 0:
-			canvas = self._canvas;
+			canvas = self._canvas
 			ROIimage.init_var(self)
-		elif self._menucheckRI.get() == 2: canvas = self._canvas;
+		elif self._menucheckRI.get() == 2: canvas = self._canvas
 
 		if self._menucheckRD.get() == 1: ROIdraw.connect_mpl(self, canvas)
 		elif self._menucheckRD.get() == 0: ROIdraw.disconnect_mpl(self, canvas)
@@ -152,6 +152,33 @@ class ROIimage():
 
 		MainDisplay.show_overlay(self)
 
+	def mergeall(self):
+
+		ROIdraw.reset(self)
+
+		ind_sel = []
+
+		for item in np.arange(len(self._roipath)):
+			ind_sel.extend(ROIimage.data_roi(self, self._roipath[item]))
+
+		fiber_selec = np.unique(self._inputdata['fiber_number'][ind_sel])
+		fn_min = np.min(fiber_selec)
+		
+		for ifiber in fiber_selec:
+			ind_curr = np.where(self._inputdata['fiber_number']==ifiber)[0]
+			self._inputdata['fiber_number'][ind_curr] = fn_min
+
+		ROIdata.fiber_new_number(self)
+		ROIdisplay.noshow_roi(self)
+
+		del self._roipath; del self._roilabel
+
+		if self._menucheckRM.get() == 1:
+			self._roiListbox.delete(0, 'end')
+
+		MainDisplay.show_overlay(self)
+
+
 	def data_roi(self, id_roi):
 
 		ind_all = np.arange(len(self._inputdata['fiber_number']))
@@ -224,18 +251,7 @@ class ROIimage():
 			else: fn_min = np.min(self._inputdata['fiber_number'].flatten())
 			self._inputdata['fiber_number'][selec_data_indices] = fn_min - 1
 		
-		try: 
-			ind_fib = np.where(self._inputdata['fiber_number'] >=0)[0]
-			ind_fib[0]
-			nc = -1
-			fiber_number = 1*self._inputdata['fiber_number']	
-			for ich in np.unique(self._inputdata['fiber_number'][ind_fib]):
-				nc = nc + 1
-				selec_data_indices = np.where(self._inputdata['fiber_number'] == ich)[0]
-				fiber_number[selec_data_indices] = nc
-			self._inputdata['fiber_number'] = fiber_number
-		except IndexError: pass
-			
+		ROIdata.fiber_new_number(self)
 
 class ROIdata():
 
@@ -262,6 +278,19 @@ class ROIdata():
 													indices, axis = 0)
 		self._inputdata['fiber_y2'] = np.delete(self._inputdata['fiber_y2'],
 													indices, axis = 0)
+
+	def fiber_new_number(self):
+		try: 
+			ind_fib = np.where(self._inputdata['fiber_number'] >=0)[0]
+			ind_fib[0]
+			nc = -1
+			fiber_number = 1*self._inputdata['fiber_number']	
+			for ich in np.unique(self._inputdata['fiber_number'][ind_fib]):
+				nc = nc + 1
+				selec_data_indices = np.where(self._inputdata['fiber_number'] == ich)[0]
+				fiber_number[selec_data_indices] = nc
+			self._inputdata['fiber_number'] = fiber_number
+		except IndexError: pass
 
 	def get_incircle(self, roi_circle, xp, yp):
 

@@ -79,7 +79,7 @@ class WindowAnalysis():
 		print('s')
 
 	def roi_mergeall(self, event):
-		print('m')
+		ROIimage.mergeall(self)
 		
 	def ref_set(self, event):
 		if self._menucheckMS.get() == 0: self._menucheckMS.set(1)
@@ -249,7 +249,8 @@ class MenuAnalysis():
 								accelerator = 'Shift+s')
 		self.menuroi.add_command(label = 'Merge',
 								underline = 0,
-								accelerator = 'Shift+m')
+								accelerator = 'Shift+m',
+								command = lambda: ROIimage.mergeall(self))
 		self.menuroi.add_separator()
 		self.menuroi.add_checkbutton(label = 'Show ROI Manager',
 									variable = self._menucheckRM)
