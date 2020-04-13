@@ -169,6 +169,14 @@ class ROIimage():
 			self._inputdata['fiber_number'][ind_curr] = fn_min
 
 		ROIdata.fiber_new_number(self)
+		ROIdisplay.noshow_roi(self)
+
+		del self._roipath; del self._roilabel
+
+		if self._menucheckRM.get() == 1:
+			self._roiListbox.delete(0, 'end')
+
+		MainDisplay.show_overlay(self)
 
 
 	def data_roi(self, id_roi):
