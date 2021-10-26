@@ -1037,7 +1037,17 @@ class ROImanager():
 		if keep == 1: mask = np.zeros(self._mat_img.shape)
 		elif keep == 0: mask = np.ones(self._mat_img.shape)
 
-		if hasattr(id_roi, 'get_width'):
+		if hasattr(id_roi, 'get_radius'):
+			x,y = id_roi.center
+			r = id_roi.get_radius()
+			mat_limroi = np.array(list(product(
+							range(int(x-r), int(x+r)),
+							range(int(y-r), int(y+r))
+							)))
+			for point in mat_limroi:
+				dist = np.sqrt((point[0] - x)**2 + (point[1] - y)**2)
+				if dist <= r: mask[point[1], point[0]] = keep
+		elif hasattr(id_roi, 'get_width'):
 			x,y = id_roi.get_xy()
 			width = id_roi.get_width()
 			height = id_roi.get_height()
@@ -1046,16 +1056,7 @@ class ROImanager():
 						range(int(y),int(y+height)))))
 			for point in mat_roi:
 				mask[point[1], point[0]] = keep
-		elif hasattr(id_roi, 'get_radius'):
-			x,y = id_roi.center
-			r = id_roi.get_radius()
-			mat_limroi = np.array(list(product(
-							range(int(x-r), int(x+r)),
-							range(int(y-r), int(y+r)))))
-			for point in mat_limroi:
-				dist = np.sqrt((point[0]-x)**2+(point[1]-y)**2)
-				if dist<= r : mask[point[1], point[0]] = keep
-
+				
 		return mask
 
 	def setstate_noroi(self):
